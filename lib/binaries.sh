@@ -69,7 +69,9 @@ install_nodejs_icu_data() {
   local dir="$1"
 
   local version="$(node -e 'process.stdout.write(process.versions.icu)')"
-  local url="http://download.icu-project.org/files/icu4c/${version}/icu4c-${version/./_}-src.tgz"
+  # local url="http://download.icu-project.org/files/icu4c/${version}/icu4c-${version/./_}-src.tgz"
+  # Direct link to mirror, sourceforce is under DDoS right now
+  local url="https://freefr.dl.sourceforge.net/project/icu/ICU4C/${version}/icu4c-${version/./_}-src.tgz"
 
   echo "Downloading and installing ICU data $version..."
   local code=$(curl "$url" --silent --fail --retry 5 --retry-max-time 15 --location -o /tmp/icu.tar.gz --write-out "%{http_code}")
