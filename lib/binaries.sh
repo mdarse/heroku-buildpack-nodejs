@@ -65,6 +65,22 @@ install_iojs() {
   chmod +x $dir/bin/*
 }
 
+install_nodejs_icu_data() {
+  local dir="$1"
+
+  local version="$(node -e 'process.stdout.write(process.versions.icu)')"
+  local url="http://download.icu-project.org/files/icu4c/${version}/icu4c-${version/./_}-src.tgz"
+
+  echo "Downloading and installing ICU data $version..."
+  local code=$(curl "$url" --silent --fail --retry 5 --retry-max-time 15 --location -o /tmp/icu.tar.gz --write-out "%{http_code}")
+  if [ "$code" != "200" ]; then
+    echo "Unable to download ICU data: $code" && false
+  fi
+  tar xzf /tmp/icu.tar.gz -C /tmp
+  mkdir -p "$dir"
+  mv /tmp/icu/source/data/in/icudt*.dat "$dir"
+}
+
 install_npm() {
   local version="$1"
   local dir="$2"
